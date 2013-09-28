@@ -197,3 +197,26 @@ def test_depth():
     assert depth(n3) == 2
     assert depth(n4) == 3
 
+
+def test_chatter():
+    botname = "Chatty"
+
+    @patterns
+    def answer():
+        if ['hello']: "Hello, my name is %s" % botname
+        if ['hello', 'my', 'name', 'is', name]: "Hello, %s!" % name.capitalize()
+        if ['how', 'much', 'is'] + expr: "It is %d" % eval(' '.join(expr))
+        if ['bye']: "Good bye!"
+
+    @patterns
+    def chatterbot():
+        if l is list: answer([s.lower() for s in l])
+        if s is str: chatterbot(s.split())
+
+    assert chatterbot("hello") == "Hello, my name is Chatty"
+    assert chatterbot("how much is 5 * 10") == "It is 50"
+    assert chatterbot("how much is 5 - 10") == "It is -5"
+    assert chatterbot("how much is 5 + 10 - 1") == "It is 14"
+    assert chatterbot("how much is 5 + 10 - 1") == "It is 14"
+    assert chatterbot("hello my name is alice") == "Hello, Alice!"
+
