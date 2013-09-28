@@ -175,3 +175,25 @@ def test_factorial():
     assert factorial(5) == 120
     assert factorial([3,4,2]) == [6, 24, 2]
     assert factorial({'n': [5, 1], 'f': sum}) == 121
+
+
+def test_depth():
+    def make_node(v, l=None, r=None):
+        return ('Tree', v, l, r)
+
+    @patterns
+    def depth():
+        if ('Tree', _, l, r): 1 + max(depth(l), depth(r))
+        if None: 0
+
+    n1 = make_node(1)
+    n2 = make_node(2, n1)
+    n3 = make_node(3, n1, n1)
+    n4 = make_node(4, n2, n3)
+    
+    assert depth(None) == 0
+    assert depth(n1) == 1
+    assert depth(n2) == 2
+    assert depth(n3) == 2
+    assert depth(n4) == 3
+
